@@ -3,7 +3,7 @@ package com.alseed.todolist;
 public class Task {
     private Integer id;
     private String description;
-    private boolean toggled;
+    private boolean completed;
 
     public Task() {
     }
@@ -11,7 +11,7 @@ public class Task {
     public Task(Integer id, String description) {
         this.id = id;
         this.description = description;
-        this.toggled = false;
+        this.completed = false;
     }
 
     public Integer getId() {
@@ -26,11 +26,11 @@ public class Task {
         return description;
     }
 
-    public boolean isToggled() {
-        return toggled;
+    public boolean isCompleted() {
+        return completed;
     }
 
-    public void setToggled(boolean toggled) {
-        this.toggled = toggled;
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 }

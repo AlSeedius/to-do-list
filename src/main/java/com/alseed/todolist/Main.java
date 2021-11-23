@@ -12,23 +12,32 @@ public class Main {
             String input;
             while ((input = bufferedReader.readLine())!=null) {
                 String[] inputArray = input.split(" ");
-                if (inputArray[0].equals("add"))
-                    add(inputArray);
-                else if (inputArray[0].equals("print"))
-                    System.out.println(print(inputArray));
-                else if (inputArray[0].equals("toggle"))
-                    System.out.println(toggle(inputArray));
-                else if (inputArray[0].equals("search"))
-                    System.out.println(search(inputArray));
-                else if (inputArray[0].equals("delete"))
-                    System.out.println(delete(inputArray));
-                else if (inputArray[0].equals("edit"))
-                    System.out.println(edit(inputArray));
-                else if (inputArray[0].equals("quit"))
-                    break;
-                else {
-                    System.out.println("Указана неверная команда");
+                switch (inputArray[0]) {
+                    case ("add"):
+                        add(inputArray);
+                        break;
+                    case ("print"):
+                        System.out.println(print(inputArray));
+                        break;
+                    case ("toggle"):
+                        System.out.println(toggle(inputArray));
+                        break;
+                    case ("delete"):
+                        System.out.println(delete(inputArray));
+                        break;
+                    case ("edit"):
+                        System.out.println(edit(inputArray));
+                        break;
+                    case ("search"):
+                        System.out.println(search(inputArray));
+                        break;
+                    default:
+                        if (!inputArray[0].equals("quit"))
+                            System.out.println("Указана неверная команда");
+                        break;
                 }
+                if (inputArray[0].equals("quit"))
+                    break;
             }
         }
         catch (Exception e){
@@ -54,32 +63,27 @@ public class Main {
 
     private static String print(String[] input){
         String output;
+        StringBuilder stringBuilder = new StringBuilder();
         try {
             String command;
             if (input.length==1) {
-                String[] finalOutput = new String[] {""};
                 taskList.
                         stream()
-                        .filter((s) -> !s.isToggled())
-                        .forEach((s) -> finalOutput[0]+=printOutputCreator(s));
-                return finalOutput[0];
+                        .filter((s) -> !s.isCompleted())
+                        .forEach((s) -> stringBuilder.append(printOutputCreator(s)));
+                return stringBuilder.toString();
             }
             else if (input[1].contains("[") && input[1].contains("]"))
                 command = input[1].substring(1, input[1].length()-1);
             else
                 return "Не указаны аргументы для команды.";
             if (command.toLowerCase().equals("all")) {
-                String[] finalOutput = new String[] {""};
                 taskList.
                         stream()
-                        .forEach((s) -> finalOutput[0]+=printOutputCreator(s));
-                return finalOutput[0];
-            } else {
-                Task chosenTask;
-                if ((chosenTask = findTaskById(Integer.parseInt(command))) != null) {
-                    output = printOutputCreator(chosenTask);
-                } else output = "Указанная задача не найдена";
+                        .forEach((s) -> stringBuilder.append(printOutputCreator(s)));
+                return stringBuilder.toString();
             }
+            else output="Указан неверный аргумент для команды";
         }
         catch (NumberFormatException e){
             output = "Указан неверный аргумент";
@@ -90,15 +94,15 @@ public class Main {
         return output;
     }
 
-    private static String getSymbol(boolean toggled){
-        if (toggled)
+    private static String getSymbol(boolean completed){
+        if (completed)
             return "[x] ";
         else
             return "[] ";
     }
 
     private static String printOutputCreator(Task task){
-        return task.getId() + ". " + getSymbol(task.isToggled()) + task.getDescription() + '\n';
+        return task.getId() + ". " + getSymbol(task.isCompleted()) + task.getDescription() + '\n';
     }
 
     private static Task findTaskById(int id) {
@@ -114,7 +118,7 @@ public class Main {
         try{
             id = Integer.parseInt(input[1]);
             if ((t=findTaskById(id))!=null) {
-                t.setToggled(!t.isToggled());
+                t.setCompleted(!t.isCompleted());
                 return "";
             }
             else{
@@ -131,12 +135,12 @@ public class Main {
 
     private static String search(String[] input){
         String searchedString = input[1];
-        String[] finalOutput = new String[] {""};
+        StringBuilder stringBuilder = new StringBuilder();
         taskList.
                 stream()
                 .filter((s) -> s.getDescription().contains(searchedString))
-                .forEach((s) -> finalOutput[0]+=printOutputCreator(s));
-        return finalOutput[0];
+                .forEach((s) -> stringBuilder.append(printOutputCreator(s)));
+        return stringBuilder.toString();
     }
 
     private static String delete(String[] input){
@@ -166,11 +170,11 @@ public class Main {
         }
     }
 
-    private static String concatArray(String[] input, int nStart){
-        String output="";
-        for (int i=nStart; i<input.length; i++)
-            output+=input[i]+" ";
-        return output.trim();
+    private static String concatArray(String[] input, int nStart) {
+        StringBuilder output = new StringBuilder();
+        for (int i = nStart; i < input.length; i++)
+            output.append(input[i] + " ");
+        return output.toString().trim();
     }
 
 }
