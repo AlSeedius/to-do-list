@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Main {
     static List<Task> taskList = new ArrayList<>();
@@ -165,10 +166,9 @@ public class Main {
     }
 
     private static String concatArray(String[] input, int nStart) {
-        StringBuilder output = new StringBuilder();
-        for (int i = nStart; i < input.length; i++)
-            output.append(input[i] + " ");
-        return output.toString().trim();
+        return IntStream.range(nStart, input.length)
+                .mapToObj((s) -> input[s])
+                .collect(Collectors.joining(" "));
     }
 
 }
