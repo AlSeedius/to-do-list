@@ -3,6 +3,7 @@ package com.alseed.todolist;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
     static List<Task> taskList = new ArrayList<>();
@@ -65,23 +66,18 @@ public class Main {
         String output;
         StringBuilder stringBuilder = new StringBuilder();
         try {
-            String command;
             if (input.length==1) {
-                taskList.
+                return taskList.
                         stream()
                         .filter((s) -> !s.isCompleted())
-                        .forEach((s) -> stringBuilder.append(printOutputCreator(s)));
-                return stringBuilder.toString();
+                        .map(Main::printOutputCreator)
+                        .collect(Collectors.joining("\n"));
             }
-            else if (input[1].contains("[") && input[1].contains("]"))
-                command = input[1].substring(1, input[1].length()-1);
-            else
-                return "Не указаны аргументы для команды.";
-            if (command.toLowerCase().equals("all")) {
-                taskList.
+            else if (input[1].toLowerCase().equals("all")) {
+                return taskList.
                         stream()
-                        .forEach((s) -> stringBuilder.append(printOutputCreator(s)));
-                return stringBuilder.toString();
+                        .map(Main::printOutputCreator)
+                        .collect(Collectors.joining("\n"));
             }
             else output="Указан неверный аргумент для команды";
         }
@@ -102,7 +98,7 @@ public class Main {
     }
 
     private static String printOutputCreator(Task task){
-        return task.getId() + ". " + getSymbol(task.isCompleted()) + task.getDescription() + '\n';
+        return task.getId() + ". " + getSymbol(task.isCompleted()) + task.getDescription();
     }
 
     private static Task findTaskById(int id) {
@@ -134,13 +130,11 @@ public class Main {
     }
 
     private static String search(String[] input){
-        String searchedString = input[1];
-        StringBuilder stringBuilder = new StringBuilder();
-        taskList.
+        return taskList.
                 stream()
-                .filter((s) -> s.getDescription().contains(searchedString))
-                .forEach((s) -> stringBuilder.append(printOutputCreator(s)));
-        return stringBuilder.toString();
+                .filter((s) -> s.getDescription().contains(input[1]))
+                .map(Main::printOutputCreator)
+                .collect(Collectors.joining("\n"));
     }
 
     private static String delete(String[] input){
