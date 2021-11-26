@@ -3,47 +3,59 @@ package com.alseed.todolist;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Main {
     static List<Task> taskList = new ArrayList<>();
+    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
+    static boolean loggingEnabled = false;
     public static void main(String[] args) {
+        loggingEnabled = Arrays.stream(args).
+                filter(s -> s.equals("log")).
+                count()>0;
         try (InputStreamReader in = new InputStreamReader(System.in);
              BufferedReader bufferedReader = new BufferedReader(in)) {
             String input;
             while ((input = bufferedReader.readLine())!=null) {
                 String[] inputArray = input.split(" ");
+                if (loggingEnabled)
+                    LOGGER.debug("input: " + input);
                 switch (inputArray[0]) {
                     case ("add"):
                         add(inputArray);
                         break;
                     case ("print"):
-                        System.out.println(print(inputArray));
+                        printAndLogDebug(print(inputArray));
                         break;
                     case ("toggle"):
-                        System.out.println(toggle(inputArray));
+                        printAndLogDebug(toggle(inputArray));
                         break;
                     case ("delete"):
-                        System.out.println(delete(inputArray));
+                        printAndLogDebug(delete(inputArray));
                         break;
                     case ("edit"):
-                        System.out.println(edit(inputArray));
+                        printAndLogDebug(edit(inputArray));
                         break;
                     case ("search"):
-                        System.out.println(search(inputArray));
+                        printAndLogDebug(search(inputArray));
                         break;
                     default:
                         if (!inputArray[0].equals("quit"))
-                            System.out.println("Указана неверная команда");
+                            printAndLogDebug("Указана неверная команда");
                         break;
                 }
-                if (inputArray[0].equals("quit"))
+                if (inputArray[0].equals("quit")) {
+                    LOGGER.debug("Завершение работы приложения");
                     break;
+                }
             }
         }
         catch (Exception e){
-            System.out.println("Указана неверная команда");
+            printAndLogError("Необработанное исключение", e);
         }
     }
 
@@ -65,7 +77,6 @@ public class Main {
 
     private static String print(String[] input){
         String output;
-        StringBuilder stringBuilder = new StringBuilder();
         try {
             if (input.length==1) {
                 return taskList.
@@ -83,10 +94,10 @@ public class Main {
             else output="Указан неверный аргумент для команды";
         }
         catch (NumberFormatException e){
-            output = "Указан неверный аргумент";
+            output = printAndLogError("Указан неверный аргумент", e);
         }
         catch (Exception e){
-            output = "Необработанное исключение";
+            output = printAndLogError("Необработанное исключение", e);
         }
         return output;
     }
@@ -123,19 +134,23 @@ public class Main {
             }
         }
         catch (NumberFormatException e){
-            return "Неверно указан id";
+            return printAndLogError("Неверно указан id", e);
         }
         catch (Exception e){
-            return "Необработанное исключение";
+            return printAndLogError("Необработанное исключение", e);
         }
     }
 
-    private static String search(String[] input){
-        return taskList.
+    private static String search(String[] input) {
+        String output = taskList.
                 stream()
                 .filter((s) -> s.getDescription().contains(input[1]))
                 .map(Main::printOutputCreator)
                 .collect(Collectors.joining("\n"));
+        if (output.length()<0)
+            return output;
+        else
+            return "Ничего не найдено";
     }
 
     private static String delete(String[] input){
@@ -145,7 +160,7 @@ public class Main {
             return "";
         }
         catch (NumberFormatException e){
-            return "Неверно указан аргумент";
+            return printAndLogError("Неверно указан аргумент", e);
         }
     }
 
@@ -158,10 +173,10 @@ public class Main {
             return "";
         }
         catch (NumberFormatException e){
-            return "Неверно указан аргумент";
+            return printAndLogError("Неверно указан аргумент", e);
         }
         catch (Exception e){
-            return "Необработанное исключение";
+            return printAndLogError("Необработанное исключение", e);
         }
     }
 
@@ -169,6 +184,17 @@ public class Main {
         return IntStream.range(nStart, input.length)
                 .mapToObj((s) -> input[s])
                 .collect(Collectors.joining(" "));
+    }
+
+    private static void printAndLogDebug(String printLine) {
+        if (printLine.length() > 0 && loggingEnabled)
+            LOGGER.debug("output: " + printLine);
+        System.out.println(printLine);
+    }
+
+    private static String printAndLogError(String printLine, Exception e){
+        LOGGER.error(e.toString());
+        return printLine;
     }
 
 }
