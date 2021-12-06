@@ -1,27 +1,28 @@
 package com.alseed.todolist.commands;
 
 import com.alseed.todolist.TaskRepository;
-import com.alseed.todolist.interfaces.ConsoleWriter;
+import com.alseed.todolist.services.ConsoleWriterService;
+import com.alseed.todolist.services.LogWriterService;
 import com.alseed.todolist.workers.ArgumentWorker;
-import com.alseed.todolist.workers.LogWriter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-public class Toggle extends BasicCommand implements ConsoleWriter {
+public class Toggle extends BasicCommand {
 
     private static String name = "Toggle";
     private List<String> arguments;
 
-    public Toggle(TaskRepository taskRepository, LogWriter logWriter) {
-        super(taskRepository, logWriter);
+    @Autowired
+    public Toggle(TaskRepository taskRepository, LogWriterService logWriter, ConsoleWriterService consoleWriterService, ArgumentWorker argumentWorker) {
+        super(taskRepository, logWriter, consoleWriterService, argumentWorker);
     }
 
     public boolean setArguments(Arguments arguments) {
         try {
             if (arguments != null) {
                 List<String> tempArguments =
-                        new ArgumentWorker(arguments, 1, true,
-                                getTaskRepository(), getLogWriter()).getResultedArguments();
+                        argumentWorker.getResultedArguments(arguments, 1, true);
                 if (tempArguments.size() > 0) {
                     this.arguments = tempArguments;
                     return true;
@@ -29,13 +30,13 @@ public class Toggle extends BasicCommand implements ConsoleWriter {
             }
             return false;
         } catch (Exception e) {
-            getLogWriter().logException(e);
+            logWriter.logException(e);
             return false;
         }
     }
 
-    public void execute(){
-        getTaskRepository().toggleTask(Integer.parseInt(arguments.get(0)));
+    public void execute() {
+        taskRepository.toggleTask(Integer.parseInt(arguments.get(0)));
     }
 
 }

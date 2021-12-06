@@ -1,16 +1,20 @@
 package com.alseed.todolist.workers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+
+@Component
 public class CommandSeeker {
-    private String seekingName;
-    private CommandList commandList;
     private String fullCommandName;
 
-    public CommandSeeker(String commandName, CommandList cl){
-        this.seekingName = commandName;
-        this.commandList = cl;
+    @Autowired
+    CommandList commandList;
+
+    public CommandSeeker(){
     }
 
-    public boolean commandExists(){
+    public boolean commandExists(String seekingName){
         return commandList.getExistingCommands()
                 .stream()
                 .filter(s -> s.toLowerCase().contains(seekingName.toLowerCase()))

@@ -1,27 +1,29 @@
 package com.alseed.todolist.commands;
 
 import com.alseed.todolist.TaskRepository;
-import com.alseed.todolist.interfaces.ConsoleWriter;
+import com.alseed.todolist.services.ConsoleWriterService;
+import com.alseed.todolist.services.LogWriterService;
 import com.alseed.todolist.workers.ArgumentWorker;
-import com.alseed.todolist.workers.LogWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
-
-public class Delete extends BasicCommand implements ConsoleWriter {
+@Component
+public class Delete extends BasicCommand {
 
     private static String name = "Delete";
 
     private List<String> arguments;
 
-    public Delete(TaskRepository taskRepository, LogWriter logWriter) {
-        super(taskRepository, logWriter);
+    @Autowired
+    public Delete(TaskRepository taskRepository, LogWriterService logWriter, ConsoleWriterService consoleWriterService, ArgumentWorker argumentWorker) {
+        super(taskRepository, logWriter, consoleWriterService, argumentWorker);
     }
 
     public boolean setArguments(Arguments arguments) {
         if (arguments != null) {
             List<String> tempArguments =
-                    new ArgumentWorker(arguments, 1, true,
-                            getTaskRepository(), getLogWriter()).getResultedArguments();
+                    argumentWorker.getResultedArguments(arguments, 1, true);
             if (tempArguments.size() > 0) {
                 this.arguments = tempArguments;
                 return true;
@@ -31,7 +33,7 @@ public class Delete extends BasicCommand implements ConsoleWriter {
     }
 
     public void execute(){
-        getTaskRepository().deleteTask(Integer.parseInt(arguments.get(0)));
+        taskRepository.deleteTask(Integer.parseInt(arguments.get(0)));
     }
 
 }

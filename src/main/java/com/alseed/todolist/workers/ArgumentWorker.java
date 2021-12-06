@@ -3,29 +3,36 @@ package com.alseed.todolist.workers;
 import com.alseed.todolist.TaskRepository;
 import com.alseed.todolist.commands.Arguments;
 import com.alseed.todolist.interfaces.ArgumentValidator;
-import com.alseed.todolist.interfaces.ConsoleWriter;
+import com.alseed.todolist.services.ConsoleWriterService;
+import com.alseed.todolist.services.LogWriterService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class ArgumentWorker implements ArgumentValidator, ConsoleWriter {
+@Component
+public class ArgumentWorker implements ArgumentValidator {
+
     private Arguments arguments;
-    private Integer numberOfArguments;
     private Boolean isFirstArgumentId;
-    private TaskRepository taskRepository;
-    private LogWriter logWriter;
+    @Autowired
+    ConsoleWriterService consoleWriterService;
 
-    public ArgumentWorker(Arguments arguments, Integer numberOfArguments, boolean isFirstArgumentId, TaskRepository taskRepository, LogWriter logWriter) {
+    @Autowired
+    TaskRepository taskRepository;
+
+    @Autowired
+    LogWriterService logWriter;
+
+    public ArgumentWorker() { }
+
+    public List<String> getResultedArguments(Arguments arguments, Integer numberOfArguments, boolean isFirstArgumentId) {
         this.arguments = arguments;
-        this.numberOfArguments = numberOfArguments;
         this.isFirstArgumentId = isFirstArgumentId;
-        this.taskRepository = taskRepository;
-        this.logWriter = logWriter;
-    }
-
-    public List<String> getResultedArguments() {
         List<String> resultedArguments = new ArrayList<>();
         if (numberOfArguments == 1) {
             saveIdAsArgument(concatArray(arguments.getArguments(), 0), resultedArguments);
@@ -52,11 +59,11 @@ public class ArgumentWorker implements ArgumentValidator, ConsoleWriter {
             if (taskRepository.idExists(Integer.parseInt(argument))) {
                 return true;
             } else {
-                printWrongIdMessage();
+                consoleWriterService.printWrongIdMessage();
                 return false;
             }
         } else {
-            printWrongArgumentsMessage();
+            consoleWriterService.printWrongArgumentsMessage();
             return false;
         }
     }

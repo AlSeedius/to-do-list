@@ -1,12 +1,21 @@
 package com.alseed.todolist.workers;
 
 import com.alseed.todolist.commands.Arguments;
-
+import com.alseed.todolist.services.LogWriterService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+@Component
 public class CommandAndArgumentsExtractor {
     private String commandName;
     private Arguments args;
 
-    public CommandAndArgumentsExtractor(String bufferedReaderLine) {
+    @Autowired
+    LogWriterService logWriterService;
+
+    public CommandAndArgumentsExtractor() {}
+
+    public void extractCommandsAndArguments(String bufferedReaderLine){
+        logWriterService.logInput(bufferedReaderLine);
         String[] lines = bufferedReaderLine.split(" ");
         extractCommand(lines);
         if (lines.length > 1)
