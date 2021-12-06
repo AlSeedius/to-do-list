@@ -15,15 +15,12 @@ public class ArgumentWorker {
 
     private static ArgumentWorker argumentWorker;
 
-    private ArgumentWorker(TaskRepository taskRepository, IOWorker ioWorker) {
-        argumentValidator = new ArgumentValidator();
-        ArgumentWorker.taskRepository = taskRepository;
-        ArgumentWorker.ioWorker = ioWorker;
-    }
-
     public static ArgumentWorker getInstance(TaskRepository taskRepository, IOWorker ioWorker){
         if (argumentWorker==null){
-            argumentWorker = new ArgumentWorker(taskRepository, ioWorker);
+            argumentValidator = new ArgumentValidator();
+            ArgumentWorker.taskRepository = taskRepository;
+            ArgumentWorker.ioWorker = ioWorker;
+            argumentWorker = new ArgumentWorker();
         }
         return argumentWorker;
     }
