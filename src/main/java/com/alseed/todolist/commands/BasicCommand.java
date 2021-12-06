@@ -1,27 +1,25 @@
 package com.alseed.todolist.commands;
 
 import com.alseed.todolist.TaskRepository;
+import com.alseed.todolist.workers.ConsoleWriter;
+import com.alseed.todolist.workers.IOWorker;
 import com.alseed.todolist.workers.LogWriter;
+
+import java.util.List;
 
 public abstract class BasicCommand {
 
-    private TaskRepository taskRepository;
-    private LogWriter logWriter;
+    protected List<String> arguments;
 
-    public BasicCommand(TaskRepository taskRepository, LogWriter logWriter) {
+    protected TaskRepository taskRepository;
+    protected IOWorker ioWorker;
+
+    public BasicCommand(TaskRepository taskRepository, IOWorker ioWorker) {
         this.taskRepository = taskRepository;
-        this.logWriter = logWriter;
-    }
-
-    public LogWriter getLogWriter() {
-        return logWriter;
+        this.ioWorker = ioWorker;
     }
 
     public abstract void execute();
-
-    public TaskRepository getTaskRepository() {
-        return taskRepository;
-    }
 
     public abstract boolean setArguments(Arguments arguments);
 }

@@ -9,10 +9,8 @@ public class CommandList {
     private List<String> existingCommands;
 
     public CommandList(){
-        existingCommands = new ArrayList<>();
-        new Reflections("com.alseed.todolist.commands").getSubTypesOf(BasicCommand.class)
-                .stream()
-                .forEach(s -> existingCommands.add(s.getName()));
+        existingCommands = new ArrayList<String> (
+            Arrays.asList("print", "add", "delete", "edit", "quit", "search", "toggle"));
     }
 
     public List<String> getExistingCommands(){

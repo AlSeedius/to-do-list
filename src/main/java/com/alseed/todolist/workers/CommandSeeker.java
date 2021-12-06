@@ -2,23 +2,15 @@ package com.alseed.todolist.workers;
 
 public class CommandSeeker {
     private String seekingName;
-    private CommandList commandList;
-    private String fullCommandName;
 
-    public CommandSeeker(String commandName, CommandList cl){
+    public CommandSeeker(String commandName){
         this.seekingName = commandName;
-        this.commandList = cl;
     }
 
     public boolean commandExists(){
+        CommandList commandList = new CommandList();
         return commandList.getExistingCommands()
                 .stream()
-                .filter(s -> s.toLowerCase().contains(seekingName.toLowerCase()))
-                .map( s -> fullCommandName = s)
-                .count()>0;
-    }
-
-    public String getFullCommandName() {
-        return fullCommandName;
+                .anyMatch(s -> s.toLowerCase().contains(seekingName.toLowerCase()));
     }
 }

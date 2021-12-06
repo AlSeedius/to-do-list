@@ -1,19 +1,15 @@
 package com.alseed.todolist.commands;
 
 import com.alseed.todolist.TaskRepository;
-import com.alseed.todolist.interfaces.ConsoleWriter;
 import com.alseed.todolist.workers.ArgumentWorker;
-import com.alseed.todolist.workers.LogWriter;
+import com.alseed.todolist.workers.IOWorker;
 
 import java.util.List;
 
-public class Toggle extends BasicCommand implements ConsoleWriter {
+public class Toggle extends BasicCommand {
 
-    private static String name = "Toggle";
-    private List<String> arguments;
-
-    public Toggle(TaskRepository taskRepository, LogWriter logWriter) {
-        super(taskRepository, logWriter);
+    public Toggle(TaskRepository taskRepository, IOWorker ioWorker) {
+        super(taskRepository, ioWorker);
     }
 
     public boolean setArguments(Arguments arguments) {
@@ -21,7 +17,7 @@ public class Toggle extends BasicCommand implements ConsoleWriter {
             if (arguments != null) {
                 List<String> tempArguments =
                         new ArgumentWorker(arguments, 1, true,
-                                getTaskRepository(), getLogWriter()).getResultedArguments();
+                                taskRepository, ioWorker).getResultedArguments();
                 if (tempArguments.size() > 0) {
                     this.arguments = tempArguments;
                     return true;
@@ -29,13 +25,13 @@ public class Toggle extends BasicCommand implements ConsoleWriter {
             }
             return false;
         } catch (Exception e) {
-            getLogWriter().logException(e);
+            ioWorker.printAndLogOutput(e);
             return false;
         }
     }
 
     public void execute(){
-        getTaskRepository().toggleTask(Integer.parseInt(arguments.get(0)));
+        taskRepository.toggleTask(Integer.parseInt(arguments.get(0)));
     }
 
 }

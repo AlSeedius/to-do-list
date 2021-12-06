@@ -2,33 +2,39 @@ package com.alseed.todolist.workers;
 
 import com.alseed.todolist.TaskRepository;
 import com.alseed.todolist.commands.BasicCommand;
-import com.alseed.todolist.interfaces.ConsoleWriter;
 
 import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
-public class Parser implements ConsoleWriter {
+public class Parser {
 
-    public Parser(BufferedReader br, CommandList commandList, LogWriter logWriter) {
+    private IOWorker ioWorker;
+
+    public Parser(IOWorker ioWorker) {
+        this.ioWorker = ioWorker;
+    }
+
+    public void startParsing(){
         String input;
         TaskRepository taskRepository = new TaskRepository();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         try {
-            while ((input = br.readLine()) != null) {
-                logWriter.logInput(input);
+            while ((input = bufferedReader.readLine()) != null) {
+                ioWorker.logInput(input);
                 CommandAndArgumentsExtractor extractor = new CommandAndArgumentsExtractor(input);
-                CommandSeeker cs = new CommandSeeker(extractor.getCommandName(), commandList);
+                CommandSeeker cs = new CommandSeeker(extractor.getCommandName());
                 if (cs.commandExists()){
-                    CommandFactory commandFactory = new CommandFactory(cs.getFullCommandName());
-                    BasicCommand command = commandFactory.createCommand(taskRepository, logWriter);
+                    CommandFactory commandFactory = new CommandFactory();
+                    BasicCommand command = commandFactory.createCommand(extractor.getCommandName(), taskRepository, ioWorker);
                     if (command.setArguments(extractor.getArgs()))
                         command.execute();
                 }
                 else{
-                    printWrongCommandMessage();
+                    ioWorker.printAndLogOutput("Указана неверная команда");
                 }
             }
-
         } catch (Exception e) {
-            System.out.println(e);
+            ioWorker.printAndLogOutput(e);
         }
     }
 }

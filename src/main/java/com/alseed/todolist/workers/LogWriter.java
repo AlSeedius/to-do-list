@@ -1,6 +1,7 @@
 package com.alseed.todolist.workers;
 
 import com.alseed.todolist.Main;
+import com.alseed.todolist.entities.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,12 +19,12 @@ public class LogWriter {
 
     public void logInput(String inputLine){
         if (inputLine.length() > 0 && loggingEnabled)
-            LOGGER.debug("{}, {}", "input: ", inputLine);
+            LOGGER.debug("input: {}", inputLine);
     }
 
     public void logOutput(String inputLine){
         if (inputLine.length() > 0 && loggingEnabled)
-            LOGGER.debug("{}, {}", "output: ", inputLine);
+            LOGGER.debug("output: {}", inputLine);
     }
 
     public void logException(Exception e){

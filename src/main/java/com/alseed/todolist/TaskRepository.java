@@ -27,8 +27,7 @@ public class TaskRepository {
     public boolean idExists(Integer taskId){
         return taskList
                 .stream()
-                .filter(t -> t.getId().equals(taskId))
-                .count()>0;
+                .anyMatch(t -> t.getId().equals(taskId));
     }
 
     public void editTask(Integer taskId, String newDescription){

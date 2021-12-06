@@ -1,30 +1,26 @@
 package com.alseed.todolist.commands;
 
 import com.alseed.todolist.TaskRepository;
-import com.alseed.todolist.interfaces.ConsoleWriter;
 import com.alseed.todolist.workers.ArgumentWorker;
-import com.alseed.todolist.workers.LogWriter;
+import com.alseed.todolist.workers.IOWorker;
 
 import java.util.List;
 
-public class Add extends BasicCommand implements ConsoleWriter {
+public class Add extends BasicCommand {
 
-    private static String name = "Add";
-    private List<String> arguments;
-
-    public Add(TaskRepository taskRepository, LogWriter logWriter) {
-        super(taskRepository, logWriter);
+    public Add(TaskRepository taskRepository, IOWorker ioWorker) {
+        super(taskRepository, ioWorker);
     }
 
     public void execute() {
-        getTaskRepository().addTask(arguments.get(0));
+        taskRepository.addTask(arguments.get(0));
     }
 
     public boolean setArguments(Arguments arguments) {
         if (arguments != null) {
             List<String> tempArguments =
                     new ArgumentWorker(arguments, 1, false,
-                            getTaskRepository(), getLogWriter()).getResultedArguments();
+                            taskRepository, ioWorker).getResultedArguments();
             if (tempArguments.size() > 0) {
                 this.arguments = tempArguments;
                 return true;

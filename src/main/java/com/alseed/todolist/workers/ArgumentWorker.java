@@ -2,27 +2,25 @@ package com.alseed.todolist.workers;
 
 import com.alseed.todolist.TaskRepository;
 import com.alseed.todolist.commands.Arguments;
-import com.alseed.todolist.interfaces.ArgumentValidator;
-import com.alseed.todolist.interfaces.ConsoleWriter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class ArgumentWorker implements ArgumentValidator, ConsoleWriter {
-    private Arguments arguments;
-    private Integer numberOfArguments;
-    private Boolean isFirstArgumentId;
-    private TaskRepository taskRepository;
-    private LogWriter logWriter;
+public class ArgumentWorker {
+    private final Arguments arguments;
+    private final Integer numberOfArguments;
+    private final Boolean isFirstArgumentId;
+    private final TaskRepository taskRepository;
+    private final IOWorker ioWorker;
 
-    public ArgumentWorker(Arguments arguments, Integer numberOfArguments, boolean isFirstArgumentId, TaskRepository taskRepository, LogWriter logWriter) {
+    public ArgumentWorker(Arguments arguments, Integer numberOfArguments, boolean isFirstArgumentId, TaskRepository taskRepository, IOWorker ioWorker) {
         this.arguments = arguments;
         this.numberOfArguments = numberOfArguments;
         this.isFirstArgumentId = isFirstArgumentId;
         this.taskRepository = taskRepository;
-        this.logWriter = logWriter;
+        this.ioWorker = ioWorker;
     }
 
     public List<String> getResultedArguments() {
@@ -48,15 +46,16 @@ public class ArgumentWorker implements ArgumentValidator, ConsoleWriter {
     }
 
     private boolean checkIdArgument(String argument) {
-        if (isValidNumber(argument)) {
+        ArgumentValidator argumentValidator = new ArgumentValidator();
+        if (argumentValidator.isValidNumber(argument)) {
             if (taskRepository.idExists(Integer.parseInt(argument))) {
                 return true;
             } else {
-                printWrongIdMessage();
+                ioWorker.printAndLogOutput("Не найден указанный идентификатор");
                 return false;
             }
         } else {
-            printWrongArgumentsMessage();
+            ioWorker.printAndLogOutput("Неверно указаны аргументы к команде");
             return false;
         }
     }
