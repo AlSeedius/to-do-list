@@ -1,4 +1,4 @@
-package com.alseed.todolist;
+package com.alseed.todolist.entities;
 
 public class Task {
     private Integer id;
