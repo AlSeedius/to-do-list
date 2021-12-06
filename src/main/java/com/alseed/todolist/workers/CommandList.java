@@ -1,8 +1,5 @@
 package com.alseed.todolist.workers;
 
-import com.alseed.todolist.commands.BasicCommand;
-import org.reflections.Reflections;
-
 import java.util.*;
 
 public class CommandList {

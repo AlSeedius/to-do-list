@@ -1,7 +1,6 @@
 package com.alseed.todolist.workers;
 
 import com.alseed.todolist.Main;
-import com.alseed.todolist.entities.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,9 +11,9 @@ public class LogWriter {
     private static boolean loggingEnabled;
 
     public LogWriter(String[] args){
-        this.loggingEnabled = Arrays.stream(args).
-                filter(s -> s.equals("log")).
-                count()>0;
+        this.loggingEnabled = Arrays
+                .stream(args)
+                .anyMatch(s -> s.equals("log"));
     }
 
     public void logInput(String inputLine){

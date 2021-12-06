@@ -5,10 +5,6 @@ import com.alseed.todolist.commands.*;
 
 public class CommandFactory {
 
-    public CommandFactory(){
-
-    }
-
     public BasicCommand createCommand(String commandName, TaskRepository taskRepository, IOWorker ioWorker) {
         switch (commandName.toLowerCase().trim()){
             case ("add"):

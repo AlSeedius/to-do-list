@@ -1,9 +1,7 @@
 package com.alseed.todolist.commands;
 
 import com.alseed.todolist.TaskRepository;
-import com.alseed.todolist.workers.ConsoleWriter;
 import com.alseed.todolist.workers.IOWorker;
-import com.alseed.todolist.workers.LogWriter;
 
 import java.util.List;
 

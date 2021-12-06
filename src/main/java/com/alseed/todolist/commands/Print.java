@@ -23,9 +23,8 @@ public class Print extends BasicCommand {
 
     public boolean setArguments(Arguments arguments) {
         if (arguments != null) {
-            List<String> tempArguments =
-                    new ArgumentWorker(arguments, 1, false,
-                            taskRepository, ioWorker).getResultedArguments();
+            List<String> tempArguments = ArgumentWorker.getInstance(taskRepository, ioWorker).getResultedArguments(arguments,
+                            1, false);
             if (tempArguments.size() > 0 && tempArguments.get(0).equals("all")) {
                 this.arguments = tempArguments;
                 return true;

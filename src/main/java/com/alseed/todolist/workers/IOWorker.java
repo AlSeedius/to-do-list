@@ -43,7 +43,12 @@ public class IOWorker {
     }
 
     private static String printOutputCreator(Task task){
-        return task.getId() + ". " + getSymbol(task.isCompleted()) + task.getDescription();
+        StringBuilder sb = new StringBuilder();
+        sb.append(task.getId());
+        sb.append(". ");
+        sb.append(getSymbol(task.isCompleted()));
+        sb.append(task.getDescription());
+        return sb.toString();
     }
 
     private String taskOutputList(Stream<Task> taskStream) {
@@ -52,14 +57,3 @@ public class IOWorker {
     }
 
 }
-
-/*
-    public void printWrongArgumentsMessage(){
-        System.out.println("Неверно указаны аргументы к команде");
-    }
-
-    public void printWrongCommandMessage(){
-        System.out.println("Неверно указана команда");
-    }
-
-    public void printWrongIdMessage() {System.out.println("Не найден указанный идентификатор");}*/

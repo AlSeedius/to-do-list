@@ -2,9 +2,7 @@ package com.alseed.todolist.workers;
 
 import java.util.regex.Pattern;
 
-public class ArgumentValidator {
-
-    public ArgumentValidator(){}
+public final class ArgumentValidator {
 
     public boolean isValidNumber(String string) {
         Pattern pattern = Pattern.compile("\\d+");

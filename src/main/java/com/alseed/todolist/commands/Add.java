@@ -19,8 +19,7 @@ public class Add extends BasicCommand {
     public boolean setArguments(Arguments arguments) {
         if (arguments != null) {
             List<String> tempArguments =
-                    new ArgumentWorker(arguments, 1, false,
-                            taskRepository, ioWorker).getResultedArguments();
+                    ArgumentWorker.getInstance(taskRepository, ioWorker).getResultedArguments(arguments, 1, false);
             if (tempArguments.size() > 0) {
                 this.arguments = tempArguments;
                 return true;

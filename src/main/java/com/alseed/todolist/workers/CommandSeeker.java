@@ -1,13 +1,8 @@
 package com.alseed.todolist.workers;
 
 public class CommandSeeker {
-    private String seekingName;
 
-    public CommandSeeker(String commandName){
-        this.seekingName = commandName;
-    }
-
-    public boolean commandExists(){
+    public boolean commandExists(String seekingName){
         CommandList commandList = new CommandList();
         return commandList.getExistingCommands()
                 .stream()

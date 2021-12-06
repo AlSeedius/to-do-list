@@ -9,44 +9,44 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class ArgumentWorker {
-    private final Arguments arguments;
-    private final Integer numberOfArguments;
-    private final Boolean isFirstArgumentId;
-    private final TaskRepository taskRepository;
-    private final IOWorker ioWorker;
+    private static TaskRepository taskRepository;
+    private static IOWorker ioWorker;
+    private static ArgumentValidator argumentValidator;
 
-    public ArgumentWorker(Arguments arguments, Integer numberOfArguments, boolean isFirstArgumentId, TaskRepository taskRepository, IOWorker ioWorker) {
-        this.arguments = arguments;
-        this.numberOfArguments = numberOfArguments;
-        this.isFirstArgumentId = isFirstArgumentId;
-        this.taskRepository = taskRepository;
-        this.ioWorker = ioWorker;
+    private static ArgumentWorker argumentWorker;
+
+    private ArgumentWorker(TaskRepository taskRepository, IOWorker ioWorker) {
+        argumentValidator = new ArgumentValidator();
+        ArgumentWorker.taskRepository = taskRepository;
+        ArgumentWorker.ioWorker = ioWorker;
     }
 
-    public List<String> getResultedArguments() {
+    public static ArgumentWorker getInstance(TaskRepository taskRepository, IOWorker ioWorker){
+        if (argumentWorker==null){
+            argumentWorker = new ArgumentWorker(taskRepository, ioWorker);
+        }
+        return argumentWorker;
+    }
+
+    public List<String> getResultedArguments(Arguments arguments, Integer numberOfArguments, Boolean isFirstArgumentId) {
         List<String> resultedArguments = new ArrayList<>();
         if (numberOfArguments == 1) {
-            saveIdAsArgument(concatArray(arguments.getArguments(), 0), resultedArguments);
+            saveIdAsArgument(concatArray(arguments.getArguments(), 0), resultedArguments, arguments, isFirstArgumentId);
         } else if (numberOfArguments == 2) {
-            saveIdAsArgument(arguments.getArguments()[0], resultedArguments);
+            saveIdAsArgument(arguments.getArguments()[0], resultedArguments, arguments,  isFirstArgumentId);
         }
         return resultedArguments;
     }
 
-    private void saveIdAsArgument(String argumentToReturn, List<String> resultedArguments) {
-        if (isFirstArgumentId) {
-            if (checkIdArgument(argumentToReturn)) {
+    private void saveIdAsArgument(String argumentToReturn, List<String> resultedArguments,
+                                  Arguments arguments, Boolean isFirstArgumentId) {
+        if (!(isFirstArgumentId && !checkIdArgument(argumentToReturn))) {
                 resultedArguments.add(argumentToReturn);
                 resultedArguments.add(concatArray(arguments.getArguments(), 1));
-            }
-        } else {
-            resultedArguments.add(argumentToReturn);
-            resultedArguments.add(concatArray(arguments.getArguments(), 1));
         }
     }
 
     private boolean checkIdArgument(String argument) {
-        ArgumentValidator argumentValidator = new ArgumentValidator();
         if (argumentValidator.isValidNumber(argument)) {
             if (taskRepository.idExists(Integer.parseInt(argument))) {
                 return true;
