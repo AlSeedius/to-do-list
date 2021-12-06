@@ -22,8 +22,8 @@ public class MainLogicImplementator {
             while ((input = bufferedReader.readLine()) != null) {
                 ioWorker.logInput(input);
                 CommandAndArgumentsExtractor extractor = new CommandAndArgumentsExtractor(input);
-                CommandSeeker cs = new CommandSeeker();
-                if (cs.commandExists(extractor.getCommandName())){
+                CommandList commandList = new CommandList();
+                if (commandList.commandExists(extractor.getCommandName())){
                     CommandFactory commandFactory = new CommandFactory();
                     BasicCommand command = commandFactory.createCommand(extractor.getCommandName(), taskRepository, ioWorker);
                     if (command.setArguments(extractor.getArgs()))

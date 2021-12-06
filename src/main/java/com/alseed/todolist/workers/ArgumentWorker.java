@@ -40,7 +40,7 @@ public class ArgumentWorker {
 
     private void saveIdAsArgument(String argumentToReturn, List<String> resultedArguments,
                                   Arguments arguments, Boolean isFirstArgumentId) {
-        if (!(isFirstArgumentId && !checkIdArgument(argumentToReturn))) {
+        if (!isFirstArgumentId || checkIdArgument(argumentToReturn)) {
                 resultedArguments.add(argumentToReturn);
                 resultedArguments.add(concatArray(arguments.getArguments(), 1));
         }

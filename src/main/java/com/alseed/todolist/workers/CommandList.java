@@ -10,7 +10,13 @@ public class CommandList {
             Arrays.asList("print", "add", "delete", "edit", "quit", "search", "toggle"));
     }
 
-    public List<String> getExistingCommands(){
+    private List<String> getExistingCommands(){
         return this.existingCommands;
+    }
+
+    public boolean commandExists(String seekingName){
+        return getExistingCommands()
+                .stream()
+                .anyMatch(s -> s.toLowerCase().contains(seekingName.toLowerCase()));
     }
 }
