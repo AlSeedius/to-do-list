@@ -1,9 +1,7 @@
 package com.alseed.todolist.businesslayer;
 
 import com.alseed.todolist.entities.Arguments;
-import com.alseed.todolist.interfaces.IArgumentValidator;
 import com.alseed.todolist.interfaces.ITaskRepository;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,13 +11,15 @@ public class ArgumentWorker {
 
     private ITaskRepository taskRepository;
 
-    private String message;
+    private ArgumentErrorHandler argumentErrorHandler;
 
     public ArgumentWorker(ITaskRepository taskRepository) {
         this.taskRepository = taskRepository;
-        this.message="";
     }
 
+    public ArgumentErrorHandler getArgumentErrorHandler() {
+        return argumentErrorHandler;
+    }
 
     public List<String> getResultedArguments(Arguments arguments, Integer numberOfArguments, Boolean isFirstArgumentId) {
         List<String> resultedArguments = new ArrayList<>();
@@ -40,18 +40,16 @@ public class ArgumentWorker {
     }
 
     private boolean checkIdArgument(String argument) {
-        IArgumentValidator argumentValidator = ArgumentValidator.getInstance();
+        ArgumentValidator argumentValidator = ArgumentValidator.getInstance();
         if (argumentValidator.isValidNumber(argument)) {
             if (taskRepository.idExists(Integer.parseInt(argument))) {
                 return true;
             } else {
-                this.message = "Не найден указанный идентификатор";
-            //    ioWorker.printAndLogOutput("Не найден указанный идентификатор");
+                this.argumentErrorHandler = new ArgumentErrorHandler("Не найден указанный идентификатор");
                 return false;
             }
         } else {
-            this.message = "Неверно указаны аргументы к команде";
-         //   ioWorker.printAndLogOutput("Неверно указаны аргументы к команде");
+            this.argumentErrorHandler = new ArgumentErrorHandler("Неверно указаны аргументы к команде");
             return false;
         }
     }
@@ -60,10 +58,6 @@ public class ArgumentWorker {
         return IntStream.range(nStart, input.length)
                 .mapToObj((s) -> input[s])
                 .collect(Collectors.joining(" "));
-    }
-
-    public String getMessage(){
-        return this.message;
     }
 }
 

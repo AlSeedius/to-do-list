@@ -11,20 +11,24 @@ public class Add extends BasicCommand {
         super(taskRepository);
     }
 
-    public void execute() {
-        taskRepository.addTask(arguments.get(0));
+    public String execute() {
+        if (this.argumentErrorHandler==null) {
+            taskRepository.addTask(arguments.get(0));
+            return "";
+        }
+        else
+            return argumentErrorHandler.getErrorMessage();
     }
 
-    public boolean setArguments(Arguments arguments) {
+    public void setArguments(Arguments arguments) {
         if (arguments != null) {
             ArgumentWorker argumentWorker = new ArgumentWorker(taskRepository);
-            this.commandOutput = argumentWorker.getMessage();
             List<String> tempArguments = argumentWorker.getResultedArguments(arguments, 1, false);
             if (tempArguments.size() > 0) {
                 this.arguments = tempArguments;
-                return true;
             }
+            if (argumentWorker.getArgumentErrorHandler()!=null)
+                this.argumentErrorHandler=argumentWorker.getArgumentErrorHandler();
         }
-        return false;
     }
 }

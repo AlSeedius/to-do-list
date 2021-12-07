@@ -1,9 +1,7 @@
 package com.alseed.todolist.presentationlayer;
 
 import com.alseed.todolist.businesslayer.MainLogicImplementor;
-import com.alseed.todolist.entities.CommandExecutorMessage;
 import com.alseed.todolist.interfaces.*;
-
 import java.io.BufferedReader;
 
 public class ConsoleReaderWorker implements IConsoleReader {
@@ -15,20 +13,24 @@ public class ConsoleReaderWorker implements IConsoleReader {
     }
 
     @Override
-    public void startReadingConsole(BufferedReader bufferedReader) throws Exception {
+    public void startReadingConsole(BufferedReader bufferedReader) {
         String input;
-        while ((input = bufferedReader.readLine())!=null) {
-            ioWorker.logInput(input);
-            IParser parser = new Parser();
-            parser.ParseCommandAndArguments(input);
-            if (commandExists(parser.getParsedCommandName())){
-                IMainLogicImplementor mainLogicImplementor = new MainLogicImplementor();
-                CommandExecutorMessage taskStreamToStringConverter = mainLogicImplementor.executeCommand(parser);
-                if (taskStreamToStringConverter.getMessage().length()>0)
-                    ioWorker.printAndLogOutput(taskStreamToStringConverter.getMessage());
+        try {
+            while ((input = bufferedReader.readLine()) != null) {
+                ioWorker.logInput(input);
+                IParser parser = new Parser();
+                parser.parseCommandAndArguments(input);
+                if (commandExists(parser.getParsedCommandName())) {
+                    IMainLogicImplementor mainLogicImplementor = new MainLogicImplementor();
+                    String commandExecutorMessage = mainLogicImplementor.executeCommand(parser);
+                    if (commandExecutorMessage.length() > 0)
+                        ioWorker.printAndLogOutput(commandExecutorMessage);
+                } else
+                    ioWorker.printAndLogOutput("Не найдена указанная команда.");
             }
-            else
-                ioWorker.printAndLogOutput("Не найдена указанная команда.");
+        }
+        catch (Exception e){
+            ioWorker.printAndLogOutput(e);
         }
     }
 

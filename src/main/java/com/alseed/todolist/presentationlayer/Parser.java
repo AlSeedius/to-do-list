@@ -10,7 +10,7 @@ public class Parser implements IParser {
     private Arguments parsedCommandArguments;
 
     @Override
-    public void ParseCommandAndArguments(String input){
+    public void parseCommandAndArguments(String input){
         ICommandAndArgumentsExtractor extractor = new CommandAndArgumentsExtractor(input);
         this.parsedCommandArguments = extractor.getArgs();
         this.parsedCommandName = extractor.getCommandName();

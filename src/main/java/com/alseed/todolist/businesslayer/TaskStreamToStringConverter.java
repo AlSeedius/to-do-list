@@ -7,6 +7,8 @@ import java.util.stream.Stream;
 
 public class TaskStreamToStringConverter {
 
+    private TaskStreamToStringConverter(){}
+
     private static TaskStreamToStringConverter instance;
 
     public static TaskStreamToStringConverter getInstance(){

@@ -11,21 +11,23 @@ public class Delete extends BasicCommand {
         super(taskRepository);
     }
 
-    public boolean setArguments(Arguments arguments) {
+    public void setArguments(Arguments arguments) {
         if (arguments != null) {
             ArgumentWorker argumentWorker = new ArgumentWorker(taskRepository);
-            this.commandOutput = argumentWorker.getMessage();
             List<String> tempArguments = argumentWorker.getResultedArguments(arguments, 1, true);
             if (tempArguments.size() > 0) {
                 this.arguments = tempArguments;
-                return true;
             }
+            if (argumentWorker.getArgumentErrorHandler() != null)
+                this.argumentErrorHandler = argumentWorker.getArgumentErrorHandler();
         }
-        return false;
     }
 
-    public void execute() {
-        taskRepository.deleteTask(Integer.parseInt(arguments.get(0)));
+    public String execute() {
+        if (this.argumentErrorHandler == null) {
+            taskRepository.deleteTask(Integer.parseInt(arguments.get(0)));
+            return "";
+        } else
+            return argumentErrorHandler.getErrorMessage();
     }
-
 }

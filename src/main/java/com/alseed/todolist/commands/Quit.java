@@ -9,12 +9,12 @@ public class Quit extends BasicCommand {
         super(ITaskRepository);
     }
 
-    public void execute(){
+    public String execute(){
         System.exit(1);
+        return "Выход из программы...";
     }
 
-    public boolean setArguments(Arguments arguments) {
-        return true;
+    public void setArguments(Arguments arguments) {
     }
 
 }

@@ -12,21 +12,24 @@ public class Edit extends BasicCommand{
         super(taskRepository);
     }
 
-    public void execute() {
-        taskRepository.editTask(Integer.parseInt(arguments.get(0)), arguments.get(1));
-    }
-
-    public boolean setArguments(Arguments arguments) {
+    public void setArguments(Arguments arguments) {
         if (arguments != null) {
             ArgumentWorker argumentWorker = new ArgumentWorker(taskRepository);
-            this.commandOutput = argumentWorker.getMessage();
             List<String> tempArguments = argumentWorker.getResultedArguments(arguments, 2, true);
             if (tempArguments.size() > 0) {
                 this.arguments = tempArguments;
-                return true;
             }
+            if (argumentWorker.getArgumentErrorHandler() != null)
+                this.argumentErrorHandler = argumentWorker.getArgumentErrorHandler();
         }
-        return false;
     }
 
+    public String execute() {
+        if (this.argumentErrorHandler==null) {
+            taskRepository.editTask(Integer.parseInt(arguments.get(0)), arguments.get(1));
+            return "";
+        }
+        else
+            return argumentErrorHandler.getErrorMessage();
+    }
 }

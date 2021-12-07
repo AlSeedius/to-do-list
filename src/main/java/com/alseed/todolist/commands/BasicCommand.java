@@ -1,5 +1,6 @@
 package com.alseed.todolist.commands;
 
+import com.alseed.todolist.businesslayer.ArgumentErrorHandler;
 import com.alseed.todolist.entities.Arguments;
 import com.alseed.todolist.interfaces.ITaskRepository;
 import java.util.List;
@@ -7,18 +8,14 @@ import java.util.List;
 public abstract class BasicCommand {
 
     protected List<String> arguments;
-    protected String commandOutput;
     protected ITaskRepository taskRepository;
+    protected ArgumentErrorHandler argumentErrorHandler;
 
     public BasicCommand(ITaskRepository taskRepository) {
         this.taskRepository = taskRepository;
     }
 
-    public abstract void execute();
+    public abstract String execute();
 
-    public abstract boolean setArguments(Arguments arguments);
-
-    public String getCommandOutput(){
-        return commandOutput;
-    }
+    public abstract void setArguments(Arguments arguments);
 }

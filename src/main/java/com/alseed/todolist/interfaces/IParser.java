@@ -4,7 +4,7 @@ import com.alseed.todolist.entities.Arguments;
 
 public interface IParser {
 
-    void ParseCommandAndArguments(String input);
+    void parseCommandAndArguments(String input);
 
     String getParsedCommandName();
 

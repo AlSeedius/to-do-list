@@ -15,24 +15,26 @@ public class Print extends BasicCommand {
         super(taskRepository);
     }
 
-    public void execute() {
-        Stream<Task> taskStream = taskRepository.getTaskList().stream();
-        if (this.arguments == null)
-            taskStream = taskStream.filter(t -> !t.isCompleted());
-        this.commandOutput = TaskStreamToStringConverter.getInstance().taskOutputList(taskStream);
-    }
-
-    public boolean setArguments(Arguments arguments) {
+    public void setArguments(Arguments arguments) {
         if (arguments != null) {
             ArgumentWorker argumentWorker = new ArgumentWorker(taskRepository);
-            this.commandOutput = argumentWorker.getMessage();
             List<String> tempArguments = argumentWorker.getResultedArguments(arguments,1, false);
             if (tempArguments.size() > 0 && tempArguments.get(0).equals("all")) {
                 this.arguments = tempArguments;
-                return true;
-            } else
-                return false;
-        } else
-            return true;
+            }
+            if (argumentWorker.getArgumentErrorHandler() != null)
+                this.argumentErrorHandler = argumentWorker.getArgumentErrorHandler();
+        }
+    }
+
+    public String execute() {
+        if (this.argumentErrorHandler==null) {
+            Stream<Task> taskStream = taskRepository.getTaskList().stream();
+            if (this.arguments == null)
+                taskStream = taskStream.filter(t -> !t.isCompleted());
+            return TaskStreamToStringConverter.getInstance().taskOutputList(taskStream);
+        }
+        else
+            return argumentErrorHandler.getErrorMessage();
     }
 }
