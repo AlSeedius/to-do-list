@@ -1,7 +1,7 @@
 package com.alseed.todolist.commands;
 
-import com.alseed.todolist.TaskRepository;
 import com.alseed.todolist.entities.Task;
+import com.alseed.todolist.interfaces.TaskRepositoryInterface;
 import com.alseed.todolist.workers.ArgumentWorker;
 import com.alseed.todolist.workers.IOWorker;
 
@@ -10,12 +10,12 @@ import java.util.stream.Stream;
 
 public class Print extends BasicCommand {
 
-    public Print(TaskRepository taskRepository, IOWorker ioWorker) {
-        super(taskRepository, ioWorker);
+    public Print(TaskRepositoryInterface taskRepositoryInterface, IOWorker ioWorker) {
+        super(taskRepositoryInterface, ioWorker);
     }
 
     public void execute() {
-        Stream<Task> taskStream = taskRepository.getTaskList().stream();
+        Stream<Task> taskStream = taskRepositoryInterface.getTaskList().stream();
         if (this.arguments == null)
             taskStream = taskStream.filter(t -> !t.isCompleted());
         ioWorker.printAndLogOutput(taskStream);
@@ -23,7 +23,7 @@ public class Print extends BasicCommand {
 
     public boolean setArguments(Arguments arguments) {
         if (arguments != null) {
-            List<String> tempArguments =  new ArgumentWorker(taskRepository, ioWorker).getResultedArguments(arguments,
+            List<String> tempArguments =  new ArgumentWorker(taskRepositoryInterface, ioWorker).getResultedArguments(arguments,
                             1, false);
             if (tempArguments.size() > 0 && tempArguments.get(0).equals("all")) {
                 this.arguments = tempArguments;

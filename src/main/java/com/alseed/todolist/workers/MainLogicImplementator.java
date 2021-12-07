@@ -1,7 +1,7 @@
 package com.alseed.todolist.workers;
 
-import com.alseed.todolist.TaskRepository;
 import com.alseed.todolist.commands.BasicCommand;
+import com.alseed.todolist.interfaces.TaskRepositoryInterface;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -16,17 +16,18 @@ public class MainLogicImplementator {
 
     public void startWorking(){
         String input;
-        TaskRepository taskRepository = new TaskRepository();
+        TaskRepositoryInterface taskRepository = new TaskAsListRepository();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        CommandList commandList = new CommandList();
         try {
             while ((input = bufferedReader.readLine()) != null) {
                 ioWorker.logInput(input);
-                CommandAndArgumentsExtractor extractor = new CommandAndArgumentsExtractor(input);
-                CommandList commandList = new CommandList();
-                if (commandList.commandExists(extractor.getCommandName())){
+                Parser parser = new Parser();
+                parser.ParseCommandAndArguments(input);
+                if (commandList.commandExists(parser.getParsedCommandName())){
                     CommandFactory commandFactory = new CommandFactory();
-                    BasicCommand command = commandFactory.createCommand(extractor.getCommandName(), taskRepository, ioWorker);
-                    if (command.setArguments(extractor.getArgs()))
+                    BasicCommand command = commandFactory.createCommand(parser.getParsedCommandName(), taskRepository, ioWorker);
+                    if (command.setArguments(parser.getParsedCommandArguments()))
                         command.execute();
                 }
                 else{

@@ -1,26 +1,26 @@
 package com.alseed.todolist.workers;
 
-import com.alseed.todolist.TaskRepository;
 import com.alseed.todolist.commands.*;
+import com.alseed.todolist.interfaces.TaskRepositoryInterface;
 
 public class CommandFactory {
 
-    public BasicCommand createCommand(String commandName, TaskRepository taskRepository, IOWorker ioWorker) {
+    public BasicCommand createCommand(String commandName, TaskRepositoryInterface taskRepositoryInterface, IOWorker ioWorker) {
         switch (commandName.toLowerCase().trim()){
             case ("add"):
-                return new Add(taskRepository, ioWorker);
+                return new Add(taskRepositoryInterface, ioWorker);
             case ("delete"):
-                return new Delete(taskRepository, ioWorker);
+                return new Delete(taskRepositoryInterface, ioWorker);
             case ("edit"):
-                return new Edit(taskRepository, ioWorker);
+                return new Edit(taskRepositoryInterface, ioWorker);
             case ("print"):
-                return new Print(taskRepository, ioWorker);
+                return new Print(taskRepositoryInterface, ioWorker);
             case ("quit"):
-                return new Quit(taskRepository, ioWorker);
+                return new Quit(taskRepositoryInterface, ioWorker);
             case ("toggle"):
-                return new Toggle(taskRepository, ioWorker);
+                return new Toggle(taskRepositoryInterface, ioWorker);
             case ("search"):
-                return new Search(taskRepository, ioWorker);
+                return new Search(taskRepositoryInterface, ioWorker);
             default:
                 return null;
         }

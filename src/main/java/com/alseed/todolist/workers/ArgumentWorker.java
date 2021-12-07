@@ -1,7 +1,7 @@
 package com.alseed.todolist.workers;
 
-import com.alseed.todolist.TaskRepository;
 import com.alseed.todolist.commands.Arguments;
+import com.alseed.todolist.interfaces.TaskRepositoryInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,15 +10,13 @@ import java.util.stream.IntStream;
 
 public class ArgumentWorker {
 
-    private TaskRepository taskRepository;
+    private TaskRepositoryInterface taskRepositoryInterface;
     private IOWorker ioWorker;
 
-    private ArgumentValidator argumentValidator;
 
-    public ArgumentWorker(TaskRepository taskRepository, IOWorker ioWorker){
-        this.taskRepository = taskRepository;
+    public ArgumentWorker(TaskRepositoryInterface taskRepositoryInterface, IOWorker ioWorker) {
+        this.taskRepositoryInterface = taskRepositoryInterface;
         this.ioWorker = ioWorker;
-        this.argumentValidator = ArgumentValidator.getInstance();
     }
 
 
@@ -41,8 +39,8 @@ public class ArgumentWorker {
     }
 
     private boolean checkIdArgument(String argument) {
-        if (argumentValidator.isValidNumber(argument)) {
-            if (taskRepository.idExists(Integer.parseInt(argument))) {
+        if (ArgumentValidator.getInstance().isValidNumber(argument)) {
+            if (taskRepositoryInterface.idExists(Integer.parseInt(argument))) {
                 return true;
             } else {
                 ioWorker.printAndLogOutput("Не найден указанный идентификатор");

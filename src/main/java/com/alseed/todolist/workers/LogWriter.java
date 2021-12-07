@@ -7,13 +7,13 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 
 public class LogWriter {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
-    private static boolean loggingEnabled;
+    private final Logger LOGGER = LoggerFactory.getLogger(Main.class);
+    private final boolean loggingEnabled;
 
     public LogWriter(String[] args){
-        this.loggingEnabled = Arrays
-                .stream(args)
-                .anyMatch(s -> s.equals("log"));
+        loggingEnabled = Arrays.
+                asList(args).
+                contains("log");
     }
 
     public void logInput(String inputLine){

@@ -1,27 +1,22 @@
-package com.alseed.todolist;
+package com.alseed.todolist.workers;
 
 import com.alseed.todolist.entities.Task;
+import com.alseed.todolist.interfaces.TaskRepositoryInterface;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
-public class TaskRepository {
+public class TaskAsListRepository implements TaskRepositoryInterface {
     private List<Task> taskList;
     private static Integer currentId=0;
 
-    public TaskRepository() {
+    public TaskAsListRepository() {
         this.taskList = new ArrayList<>();
     }
 
     public List<Task> getTaskList() {
         return taskList;
-    }
-
-    public Optional<Task> getTaskById(Integer taskId) {
-        return listFilteredById(taskId)
-                .findFirst();
     }
 
     public boolean idExists(Integer taskId){
