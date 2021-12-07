@@ -14,8 +14,8 @@ public class Search extends BasicCommand{
 
     public boolean setArguments(Arguments arguments) {
         if (arguments != null) {
-            List<String> tempArguments =
-                    ArgumentWorker.getInstance(taskRepository, ioWorker).getResultedArguments(arguments, 1, false);
+            List<String> tempArguments = new
+                    ArgumentWorker(taskRepository, ioWorker).getResultedArguments(arguments, 1, false);
             if (tempArguments.size() > 0) {
                 this.arguments = tempArguments;
                 return true;

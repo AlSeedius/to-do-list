@@ -9,21 +9,18 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class ArgumentWorker {
-    private static TaskRepository taskRepository;
-    private static IOWorker ioWorker;
-    private static ArgumentValidator argumentValidator;
 
-    private static ArgumentWorker argumentWorker;
+    private TaskRepository taskRepository;
+    private IOWorker ioWorker;
 
-    public static ArgumentWorker getInstance(TaskRepository taskRepository, IOWorker ioWorker){
-        if (argumentWorker==null){
-            argumentValidator = new ArgumentValidator();
-            ArgumentWorker.taskRepository = taskRepository;
-            ArgumentWorker.ioWorker = ioWorker;
-            argumentWorker = new ArgumentWorker();
-        }
-        return argumentWorker;
+    private ArgumentValidator argumentValidator;
+
+    public ArgumentWorker(TaskRepository taskRepository, IOWorker ioWorker){
+        this.taskRepository = taskRepository;
+        this.ioWorker = ioWorker;
+        this.argumentValidator = ArgumentValidator.getInstance();
     }
+
 
     public List<String> getResultedArguments(Arguments arguments, Integer numberOfArguments, Boolean isFirstArgumentId) {
         List<String> resultedArguments = new ArrayList<>();

@@ -19,8 +19,8 @@ public class Edit extends BasicCommand{
 
     public boolean setArguments(Arguments arguments) {
         if (arguments != null) {
-            List<String> tempArguments =
-                    ArgumentWorker.getInstance(taskRepository, ioWorker).getResultedArguments(arguments, 2, true);
+            List<String> tempArguments = new
+                    ArgumentWorker(taskRepository, ioWorker).getResultedArguments(arguments, 2, true);
             if (tempArguments.size() > 0) {
                 this.arguments = tempArguments;
                 return true;

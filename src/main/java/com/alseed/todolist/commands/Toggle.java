@@ -15,8 +15,8 @@ public class Toggle extends BasicCommand {
     public boolean setArguments(Arguments arguments) {
         try {
             if (arguments != null) {
-                List<String> tempArguments =
-                        ArgumentWorker.getInstance(taskRepository, ioWorker).getResultedArguments(arguments, 1, true);
+                List<String> tempArguments = new
+                        ArgumentWorker(taskRepository, ioWorker).getResultedArguments(arguments, 1, true);
                 if (tempArguments.size() > 0) {
                     this.arguments = tempArguments;
                     return true;
