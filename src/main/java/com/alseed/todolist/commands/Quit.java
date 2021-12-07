@@ -1,12 +1,12 @@
 package com.alseed.todolist.commands;
 
-import com.alseed.todolist.interfaces.TaskRepositoryInterface;
-import com.alseed.todolist.workers.IOWorker;
+import com.alseed.todolist.entities.Arguments;
+import com.alseed.todolist.interfaces.ITaskRepository;
 
 public class Quit extends BasicCommand {
 
-    public Quit(TaskRepositoryInterface taskRepositoryInterface, IOWorker ioWorker) {
-        super(taskRepositoryInterface, ioWorker);
+    public Quit(ITaskRepository ITaskRepository) {
+        super(ITaskRepository);
     }
 
     public void execute(){

@@ -1,7 +1,8 @@
-package com.alseed.todolist.workers;
+package com.alseed.todolist.businesslayer;
 
-import com.alseed.todolist.commands.Arguments;
-import com.alseed.todolist.interfaces.TaskRepositoryInterface;
+import com.alseed.todolist.entities.Arguments;
+import com.alseed.todolist.interfaces.IArgumentValidator;
+import com.alseed.todolist.interfaces.ITaskRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +11,13 @@ import java.util.stream.IntStream;
 
 public class ArgumentWorker {
 
-    private TaskRepositoryInterface taskRepositoryInterface;
-    private IOWorker ioWorker;
+    private ITaskRepository taskRepository;
 
+    private String message;
 
-    public ArgumentWorker(TaskRepositoryInterface taskRepositoryInterface, IOWorker ioWorker) {
-        this.taskRepositoryInterface = taskRepositoryInterface;
-        this.ioWorker = ioWorker;
+    public ArgumentWorker(ITaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+        this.message="";
     }
 
 
@@ -39,15 +40,18 @@ public class ArgumentWorker {
     }
 
     private boolean checkIdArgument(String argument) {
-        if (ArgumentValidator.getInstance().isValidNumber(argument)) {
-            if (taskRepositoryInterface.idExists(Integer.parseInt(argument))) {
+        IArgumentValidator argumentValidator = ArgumentValidator.getInstance();
+        if (argumentValidator.isValidNumber(argument)) {
+            if (taskRepository.idExists(Integer.parseInt(argument))) {
                 return true;
             } else {
-                ioWorker.printAndLogOutput("Не найден указанный идентификатор");
+                this.message = "Не найден указанный идентификатор";
+            //    ioWorker.printAndLogOutput("Не найден указанный идентификатор");
                 return false;
             }
         } else {
-            ioWorker.printAndLogOutput("Неверно указаны аргументы к команде");
+            this.message = "Неверно указаны аргументы к команде";
+         //   ioWorker.printAndLogOutput("Неверно указаны аргументы к команде");
             return false;
         }
     }
@@ -58,5 +62,8 @@ public class ArgumentWorker {
                 .collect(Collectors.joining(" "));
     }
 
+    public String getMessage(){
+        return this.message;
+    }
 }
 

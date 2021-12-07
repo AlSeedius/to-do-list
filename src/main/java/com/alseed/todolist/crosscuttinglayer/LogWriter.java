@@ -1,12 +1,13 @@
-package com.alseed.todolist.workers;
+package com.alseed.todolist.crosscuttinglayer;
 
 import com.alseed.todolist.Main;
+import com.alseed.todolist.interfaces.ILogWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 
-public class LogWriter {
+public class LogWriter implements ILogWriter {
     private final Logger LOGGER = LoggerFactory.getLogger(Main.class);
     private final boolean loggingEnabled;
 

@@ -1,8 +1,8 @@
-package com.alseed.todolist.workers;
-
+package com.alseed.todolist.presentationlayer;
+import com.alseed.todolist.interfaces.ICommandList;
 import java.util.*;
 
-public class CommandList {
+public class CommandList implements ICommandList {
 
     private List<String> existingCommands;
 
@@ -11,6 +11,7 @@ public class CommandList {
             Arrays.asList("print", "add", "delete", "edit", "quit", "search", "toggle"));
     }
 
+    @Override
     public boolean commandExists(String seekingName){
         return existingCommands
                 .stream()

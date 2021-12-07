@@ -5,7 +5,7 @@ import com.alseed.todolist.entities.Task;
 import java.util.List;
 import java.util.stream.Stream;
 
-public interface TaskRepositoryInterface {
+public interface ITaskRepository {
 
     List<Task> getTaskList();
 

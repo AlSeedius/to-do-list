@@ -1,8 +1,8 @@
-package com.alseed.todolist.workers;
-
+package com.alseed.todolist.businesslayer;
+import com.alseed.todolist.interfaces.IArgumentValidator;
 import java.util.regex.Pattern;
 
-public class ArgumentValidator {
+public class ArgumentValidator implements IArgumentValidator {
 
     private static ArgumentValidator instance;
 
@@ -12,10 +12,11 @@ public class ArgumentValidator {
         return instance;
     }
 
-    public boolean isValidNumber(String string) {
+    @Override
+    public boolean isValidNumber(String line) {
         Pattern pattern = Pattern.compile("\\d+");
-        if (string == null)
+        if (line == null)
             return false;
-        return pattern.matcher(string).matches();
+        return pattern.matcher(line).matches();
     }
 }

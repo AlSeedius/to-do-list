@@ -1,4 +1,4 @@
-package com.alseed.todolist.commands;
+package com.alseed.todolist.entities;
 
 import java.util.Arrays;
 

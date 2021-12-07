@@ -1,8 +1,9 @@
-package com.alseed.todolist.workers;
+package com.alseed.todolist.presentationlayer;
 
-import com.alseed.todolist.commands.Arguments;
+import com.alseed.todolist.entities.Arguments;
+import com.alseed.todolist.interfaces.ICommandAndArgumentsExtractor;
 
-public class CommandAndArgumentsExtractor {
+public class CommandAndArgumentsExtractor implements ICommandAndArgumentsExtractor {
     private String commandName;
     private Arguments args;
 
@@ -15,10 +16,12 @@ public class CommandAndArgumentsExtractor {
             this.args = null;
     }
 
+    @Override
     public String getCommandName() {
         return commandName;
     }
 
+    @Override
     public Arguments getArgs() {
         return args;
     }

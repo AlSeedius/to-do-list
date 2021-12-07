@@ -1,23 +1,24 @@
 package com.alseed.todolist.commands;
 
-import com.alseed.todolist.interfaces.TaskRepositoryInterface;
-import com.alseed.todolist.workers.IOWorker;
-
+import com.alseed.todolist.entities.Arguments;
+import com.alseed.todolist.interfaces.ITaskRepository;
 import java.util.List;
 
 public abstract class BasicCommand {
 
     protected List<String> arguments;
+    protected String commandOutput;
+    protected ITaskRepository taskRepository;
 
-    protected TaskRepositoryInterface taskRepositoryInterface;
-    protected IOWorker ioWorker;
-
-    public BasicCommand(TaskRepositoryInterface taskRepositoryInterface, IOWorker ioWorker) {
-        this.taskRepositoryInterface = taskRepositoryInterface;
-        this.ioWorker = ioWorker;
+    public BasicCommand(ITaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
     }
 
     public abstract void execute();
 
     public abstract boolean setArguments(Arguments arguments);
+
+    public String getCommandOutput(){
+        return commandOutput;
+    }
 }

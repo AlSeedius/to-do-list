@@ -1,30 +1,32 @@
 package com.alseed.todolist.commands;
 
+import com.alseed.todolist.businesslayer.TaskStreamToStringConverter;
+import com.alseed.todolist.entities.Arguments;
 import com.alseed.todolist.entities.Task;
-import com.alseed.todolist.interfaces.TaskRepositoryInterface;
-import com.alseed.todolist.workers.ArgumentWorker;
-import com.alseed.todolist.workers.IOWorker;
+import com.alseed.todolist.interfaces.ITaskRepository;
+import com.alseed.todolist.businesslayer.ArgumentWorker;
 
 import java.util.List;
 import java.util.stream.Stream;
 
 public class Print extends BasicCommand {
 
-    public Print(TaskRepositoryInterface taskRepositoryInterface, IOWorker ioWorker) {
-        super(taskRepositoryInterface, ioWorker);
+    public Print(ITaskRepository taskRepository) {
+        super(taskRepository);
     }
 
     public void execute() {
-        Stream<Task> taskStream = taskRepositoryInterface.getTaskList().stream();
+        Stream<Task> taskStream = taskRepository.getTaskList().stream();
         if (this.arguments == null)
             taskStream = taskStream.filter(t -> !t.isCompleted());
-        ioWorker.printAndLogOutput(taskStream);
+        this.commandOutput = TaskStreamToStringConverter.getInstance().taskOutputList(taskStream);
     }
 
     public boolean setArguments(Arguments arguments) {
         if (arguments != null) {
-            List<String> tempArguments =  new ArgumentWorker(taskRepositoryInterface, ioWorker).getResultedArguments(arguments,
-                            1, false);
+            ArgumentWorker argumentWorker = new ArgumentWorker(taskRepository);
+            this.commandOutput = argumentWorker.getMessage();
+            List<String> tempArguments = argumentWorker.getResultedArguments(arguments,1, false);
             if (tempArguments.size() > 0 && tempArguments.get(0).equals("all")) {
                 this.arguments = tempArguments;
                 return true;
