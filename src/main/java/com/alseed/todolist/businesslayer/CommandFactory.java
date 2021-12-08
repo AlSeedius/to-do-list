@@ -1,13 +1,22 @@
 package com.alseed.todolist.businesslayer;
 
 import com.alseed.todolist.commands.*;
-import com.alseed.todolist.interfaces.ICommandFactory;
 import com.alseed.todolist.interfaces.ITaskRepository;
 
-public class CommandFactory implements ICommandFactory {
+public class CommandFactory{
 
-    @Override
-    public BasicCommand createCommand(String commandName, ITaskRepository taskRepositoryImpl) {
+    private static CommandFactory instance;
+
+    private CommandFactory(){}
+
+    public static CommandFactory getInstance(){
+        if (instance==null)
+            instance = new CommandFactory();
+        return instance;
+    }
+
+
+    BasicCommand createCommand(String commandName, ITaskRepository taskRepositoryImpl) {
         switch (commandName.toLowerCase().trim()){
             case ("add"):
                 return new Add(taskRepositoryImpl);

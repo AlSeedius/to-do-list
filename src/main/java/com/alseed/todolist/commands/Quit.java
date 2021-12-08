@@ -7,6 +7,9 @@ public class Quit extends BasicCommand {
 
     public Quit(ITaskRepository ITaskRepository) {
         super(ITaskRepository);
+        numOfArguments = 0;
+        isIdFirstArgument = false;
+        name = "quit";
     }
 
     public String execute(){

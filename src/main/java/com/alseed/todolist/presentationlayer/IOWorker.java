@@ -17,8 +17,9 @@ public class IOWorker implements IIOWorker {
 
     @Override
     public void printAndLogOutput(String message){
+        if (message.length()>0)
+            consoleWriter.printMessage(message);
         logWriter.logOutput(message);
-        consoleWriter.printMessage(message);
     }
 
     @Override

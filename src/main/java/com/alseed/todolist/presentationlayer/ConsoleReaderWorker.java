@@ -20,13 +20,7 @@ public class ConsoleReaderWorker implements IConsoleReader {
                 ioWorker.logInput(input);
                 IParser parser = new Parser();
                 parser.parseCommandAndArguments(input);
-                if (commandExists(parser.getParsedCommandName())) {
-                    IMainLogicImplementor mainLogicImplementor = new MainLogicImplementor();
-                    String commandExecutorMessage = mainLogicImplementor.executeCommand(parser);
-                    if (commandExecutorMessage.length() > 0)
-                        ioWorker.printAndLogOutput(commandExecutorMessage);
-                } else
-                    ioWorker.printAndLogOutput("Не найдена указанная команда.");
+                ioWorker.printAndLogOutput(MainLogicImplementor.getInstance().commandExecutionOutput(parser));
             }
         }
         catch (Exception e){
@@ -34,9 +28,5 @@ public class ConsoleReaderWorker implements IConsoleReader {
         }
     }
 
-    private boolean commandExists(String commandName) {
-        ICommandList commandList = new CommandList();
-        return commandList.commandExists(commandName);
-    }
 
 }
