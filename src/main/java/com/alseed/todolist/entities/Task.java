@@ -1,12 +1,9 @@
-package com.alseed.todolist;
+package com.alseed.todolist.entities;
 
 public class Task {
     private Integer id;
     private String description;
     private boolean completed;
-
-    public Task() {
-    }
 
     public Task(Integer id, String description) {
         this.id = id;
