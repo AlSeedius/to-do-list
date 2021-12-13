@@ -7,9 +7,6 @@ public class Edit extends BasicCommand {
 
     public Edit(ITaskRepository taskRepository) {
         super(taskRepository);
-        isIdFirstArgument = true;
-        numOfArguments = 2;
-        name = "edit";
     }
 
     public String execute() {

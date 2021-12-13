@@ -7,9 +7,6 @@ public class Search extends BasicCommand{
 
     public Search(ITaskRepository taskRepository) {
         super(taskRepository);
-        isIdFirstArgument = false;
-        numOfArguments = 1;
-        name = "search";
     }
 
     public String execute() {

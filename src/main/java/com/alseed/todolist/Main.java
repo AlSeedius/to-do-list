@@ -1,12 +1,14 @@
 package com.alseed.todolist;
 
 import com.alseed.todolist.commands.BasicCommand;
+import com.alseed.todolist.entities.CommandInfo;
 import com.alseed.todolist.entities.CommandList;
 import com.alseed.todolist.entities.WrongArgumentException;
 import com.alseed.todolist.interfaces.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Optional;
 
 
 public class Main {
@@ -18,14 +20,15 @@ public class Main {
         ITaskRepository taskRepository = new TaskAsListRepository();
         ICommandFactory commandFactory = new CommandFactory();
         BufferedReader bufferedReader = new BufferedReader((new InputStreamReader(System.in)));
+        Optional<CommandInfo> commandInfo;
         String input;
         while ((input = bufferedReader.readLine()) != null) {
             try {
                 ICommandAndArgumentsExtractor extractor = new CommandAndArgumentsExtractor();
                 extractor.extractCommandAndArguments(input);
-                if (commandSeeker.commandExists(extractor.getCommandName())) {
+                if ((commandInfo = commandSeeker.returnCommandIfExists(extractor.getCommandName())).isPresent()) {
                     BasicCommand command = commandFactory.createCommand(extractor.getCommandName(), taskRepository);
-                    ArgumentSetter argumentSetter = new ArgumentSetter(extractor.getArguments(), taskRepository, command);
+                    ArgumentSetter argumentSetter = new ArgumentSetter(extractor.getArguments(), taskRepository, commandInfo.get());
                     command.setArguments(argumentSetter.getArgumentList());
                     consoleWriter.writeToConsole(command.execute());
                 } else

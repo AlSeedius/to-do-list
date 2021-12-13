@@ -1,6 +1,9 @@
 package com.alseed.todolist;
 
+import com.alseed.todolist.entities.CommandInfo;
 import com.alseed.todolist.interfaces.ICommandList;
+
+import java.util.Optional;
 
 public class CommandSeeker {
 
@@ -10,11 +13,12 @@ public class CommandSeeker {
         this.commandList = commandList;
     }
 
-    public boolean commandExists(String commandName){
+    public Optional<CommandInfo> returnCommandIfExists(String commandName){
         return commandList
                 .getExistingCommands()
                 .stream()
-                .anyMatch(s -> s.equals(commandName));
+                .filter(c -> c.getName().equals(commandName.toLowerCase()))
+                .findFirst();
     }
 
 }

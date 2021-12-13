@@ -8,15 +8,23 @@ import java.util.List;
 
 public class CommandList implements ICommandList {
 
-    private List<String> existingCommands;
+    private List<CommandInfo> existingCommands;
 
-    public CommandList(){
+    public CommandList() {
         existingCommands = new ArrayList<>(
-            Arrays.asList("print", "add", "delete", "edit", "quit", "search", "toggle"));
+                Arrays.asList(
+                        new CommandInfo("print", 1, false),
+                        new CommandInfo("add", 1, false),
+                        new CommandInfo("delete", 1, true),
+                        new CommandInfo("edit", 2, true),
+                        new CommandInfo("quit", 0, false),
+                        new CommandInfo("search", 1, false),
+                        new CommandInfo("toggle", 1, true)
+                ));
     }
 
     @Override
-    public List<String> getExistingCommands() {
+    public List<CommandInfo> getExistingCommands() {
         return existingCommands;
     }
 }

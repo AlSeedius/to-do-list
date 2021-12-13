@@ -10,9 +10,6 @@ public class Print extends BasicCommand {
 
     public Print(ITaskRepository taskRepository) {
         super(taskRepository);
-        isIdFirstArgument = false;
-        numOfArguments = 1;
-        name = "print";
     }
 
     public String execute() {

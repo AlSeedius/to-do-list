@@ -6,9 +6,6 @@ public class Delete extends BasicCommand {
 
     public Delete(ITaskRepository taskRepository) {
         super(taskRepository);
-        isIdFirstArgument = true;
-        numOfArguments = 1;
-        name = "delete";
     }
 
     public String execute() {

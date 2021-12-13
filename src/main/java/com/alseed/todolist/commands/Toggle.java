@@ -6,9 +6,6 @@ public class Toggle extends BasicCommand {
 
     public Toggle(ITaskRepository taskRepository) {
         super(taskRepository);
-        isIdFirstArgument = true;
-        numOfArguments = 1;
-        name = "toggle";
     }
 
     public String execute() {

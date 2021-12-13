@@ -6,9 +6,6 @@ public class Add extends BasicCommand {
 
     public Add(ITaskRepository taskRepository) {
         super(taskRepository);
-        isIdFirstArgument = false;
-        numOfArguments = 1;
-        name = "add";
     }
 
     public String execute() {

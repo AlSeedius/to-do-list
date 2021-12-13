@@ -1,6 +1,6 @@
 package com.alseed.todolist;
 
-import com.alseed.todolist.commands.BasicCommand;
+import com.alseed.todolist.entities.CommandInfo;
 import com.alseed.todolist.entities.WrongArgumentException;
 import com.alseed.todolist.interfaces.IArgumentErrorHandler;
 import com.alseed.todolist.interfaces.ITaskRepository;
@@ -15,13 +15,13 @@ public class ArgumentSetter {
 
     private Optional<String[]> arguments;
     private ITaskRepository taskRepository;
-    private BasicCommand command;
+    private CommandInfo command;
     private IArgumentErrorHandler argumentErrorHandler;
 
-    public ArgumentSetter(Optional<String[]> arguments, ITaskRepository taskRepository, BasicCommand command){
+    public ArgumentSetter(Optional<String[]> arguments, ITaskRepository taskRepository, CommandInfo commandInfo){
         this.arguments = arguments;
         this.taskRepository = taskRepository;
-        this.command = command;
+        this.command = commandInfo;
         this.argumentErrorHandler = new ArgumentErrorHandler();
     }
 
@@ -30,7 +30,7 @@ public class ArgumentSetter {
         List<String> argumentList;
         if ((command.getName().equals("print") || command.getName().equals("quit")) && !arguments.isPresent())
             return null;
-        else if (command.getNumOfArguments() == 1)
+        else if (command.getNumberOfArguments() == 1)
             argumentList = oneArgumentArray();
         else
             argumentList = twoArgumentsArray();
@@ -45,7 +45,7 @@ public class ArgumentSetter {
 
     private List<String> oneArgumentArray() throws WrongArgumentException {
         List<String> arrayToReturn = new ArrayList<>();
-        if (command.isIdFirstArgument())
+        if (command.getIdFirstArgument())
             argumentErrorHandler.checkIfIdIsWrong(arguments.get()[0], taskRepository);
         if (command.getName().equals("print") && !arguments.get()[0].equals("all"))
             throw new WrongArgumentException("Указан неверный аргумент");
